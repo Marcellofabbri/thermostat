@@ -23,7 +23,8 @@ function Thermostat(){
     if (this.temperature === 10) {
       return this.temperature
     } else {
-      return this.temperature -= 1;
+      this.temperature -= 1
+      this.energyUsage()
     }
   };
   Thermostat.prototype.powerSaveSwitch = function() {
@@ -52,13 +53,27 @@ function Thermostat(){
       thermostat.up()
       $('#temperature').text(thermostat.temperature)
       $('#usage').text(thermostat.usage)
+      if (thermostat.usage === "low-usage") {
+        $('#usage').css('color', 'green')
+      } else if (thermostat.usage === "high-usage") {
+        $('#usage').css('color', 'red')
+      } else {
+        $('#usage').css('color', 'black')
+      }
     })
 
     $('#down').on('click', function() {
         thermostat.down()
         $('#temperature').text(thermostat.temperature)
         $('#usage').text(thermostat.usage)
-      })
+        if (thermostat.usage === "low-usage") {
+          $('#usage').css('color', 'green')
+        } else if (thermostat.usage === "high-usage") {
+          $('#usage').css('color', 'red')
+        } else {
+          $('#usage').css('color', 'black')
+        }
+    })
     
     $('#reset').on('click', function() {
       thermostat.reset()
@@ -79,6 +94,19 @@ function Thermostat(){
       $('#psm').css('color', 'red')
       }
     })
+
+    $.get('http://api.openweathermap.org/data/2.5/weather?q=London&appid=a3d9eb01d4de82b9b8d0849ef604dbed&units=metric', function(data) {
+    $('#outside-tmp').text(data.main.temp);
+    })
+
+    $('#select-city').submit(function(event) {
+        event.preventDefault();
+        var city = $('#current-city').val();
+        $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=a3d9eb01d4de82b9b8d0849ef604dbed&units=metric', function(data) {
+          $('#outside-tmp').text(data.main.temp);
+          $('#here').text(data.name);
+        })
+      })
 
   });
     // if (this.power_save === true)
