@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="interface-style.css">
+
+<head>
+  <title>Thermostat</title>
+  <script src="src/thermo.js"></script>
+</head>
+<body>
+    <h2>Current Temperature</h2>
+    <h1 id="temperature-indicator">20</h1>
+    <h2>Current Power Usage</h2>
+    <h1 id="usage-indicator">mid-usage</h1>
+    <div>
+        <button class="btn" onclick="thermostat.up()">Up</button>
+    </div>
+    <div>
+        <button class="btn" onclick="thermostat.down()">Down</button>
+    </div>
+    <div>
+        <button class="btn" onclick="thermostat.resetTemp()">Reset</button>
+    </div>
+    <div>
+        <button id="psm" class="btn mode-on" onclick="thermostat.powerSaveSwitch()">PowerSavingMode</button>
+    </div>
+</body>
+</html>

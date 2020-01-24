@@ -45,11 +45,23 @@ describe ('Thermostate', function() {
     thermostat.resetTemp()
     expect(thermostat.getCurrentTemperature()).toEqual(20);
   });
-  it('if temperature is 17 or lower, energy usage equals low-usage', function () {
+  it('displays low-usage, mid-usage, high-usage depending on the temp range', function () {
     for (var i=0; i<5; i++) {
       thermostat.down()
     }
-    expect(thermostat.energyUsage()).toEqual("low-usage")
+    thermostat.energyUsage()
+    expect(thermostat.usage).toEqual("low-usage")
+    for (var i=0; i<5; i++) {
+      thermostat.up()
+    }
+    thermostat.energyUsage()
+    expect(thermostat.usage).toEqual("mid-usage")
+    thermostat.powerSaveSwitch
+    for (var i=0; i<6; i++) {
+      thermostat.up()
+    }
+    thermostat.energyUsage()
+    expect(thermostat.usage).toEqual("high-usage")
   });
 
 
