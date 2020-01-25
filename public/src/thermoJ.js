@@ -3,6 +3,24 @@ function Thermostat(){
     this.powerSaveMode = true;
     this.usage = "mid-usage";
   };
+
+  Thermostat.prototype.postTemp = function() {
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      data: {temp: this.temperature},
+      url: 'http://localhost:4567/temperature',
+      success: function(data){
+        this.temperature = data.temp;
+        $('#temperature').text(this.temperature);
+  
+      },
+      error: function(){
+        alert('Error loading temp');
+      }
+    });
+  }
+
   Thermostat.prototype.getCurrentTemperature = function() {
     return this.temperature;
   };
@@ -16,7 +34,10 @@ function Thermostat(){
     else {
       this.temperature += 1
       this.energyUsage()
-    }
+      
+      this.postTemp()
+
+    };
     
   };
   Thermostat.prototype.down = function() {
@@ -25,6 +46,7 @@ function Thermostat(){
     } else {
       this.temperature -= 1
       this.energyUsage()
+      this.postTemp()
     }
   };
   Thermostat.prototype.powerSaveSwitch = function() {
@@ -76,7 +98,8 @@ function Thermostat(){
     })
     
     $('#reset').on('click', function() {
-      thermostat.reset()
+      thermostat.resetTemp()
+      thermostat.postTemp()
     $('#temperature').text(thermostat.temperature)
     })
 
@@ -107,6 +130,22 @@ function Thermostat(){
           $('#here').text(data.name);
         })
       })
+
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: 'http://localhost:4567/temperature',
+        success: function(data){
+          thermostat.temperature = data.temp;
+          $('#temperature').text(thermostat.temperature);
+    
+        },
+        error: function(){
+          alert('Error loading temp');
+        }
+      });
+
+      
 
   });
     // if (this.power_save === true)
